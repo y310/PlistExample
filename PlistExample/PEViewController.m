@@ -14,16 +14,33 @@
 
 @implementation PEViewController
 
-- (void)viewDidLoad
+- (NSUserDefaults *)userDefaults
 {
-    [super viewDidLoad];
-	// Do any additional setup after loading the view, typically from a nib.
+    return [NSUserDefaults standardUserDefaults];
 }
 
-- (void)didReceiveMemoryWarning
+- (NSArray *)objects
 {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+    return [[self.userDefaults dictionaryRepresentation] allKeys];
+}
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return self.objects.count;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
+    NSString *key = self.objects[indexPath.row];
+    cell.textLabel.text = key;
+    cell.detailTextLabel.text = [self.userDefaults stringForKey:key];
+    return cell;
 }
 
 @end
